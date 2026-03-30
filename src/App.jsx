@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import './App.css'
+import { ThemeProvider, useTheme } from './components/context/dark-mode'
+import ThemeToggle from './components/toggle-theme/toggle-theme'
 
 const initialTodos = [
   { id: 1, text: 'NOTE #1', done: false },
@@ -9,7 +11,8 @@ const initialTodos = [
 
 const FILTERS = ['ALL', 'Complete', 'Incomplete']
 
-export default function App() {
+function AppContent() {
+  const { darkMode } = useTheme()
   const [todos, setTodos] = useState(initialTodos)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('ALL')
@@ -62,7 +65,7 @@ export default function App() {
 
         <div className="toolbar">
           <div className="search-wrap">
-            <img src="/Vector.svg" className="search-icon" alt="" />
+            <img src={darkMode ? "/Vector-dark.svg" : "/Vector.svg"} className="search-icon" alt="" />
             <input
               className="search"
               placeholder="Search note..."
@@ -87,6 +90,10 @@ export default function App() {
                 ))}
               </ul>
             )}
+          </div>
+
+          <div className="theme-toggle">
+            <ThemeToggle />
           </div>
 
         </div>
@@ -128,7 +135,7 @@ export default function App() {
 
           {filtered.length === 0 && (
             <li className="empty">
-              <img src="/Detective.png" className="empty-img" alt="" />
+              <img src={darkMode ? "/Detective-dark.png" : "/Detective.png"} className="empty-img" alt="" />
               <span>Empty...</span>
             </li>
           )}
@@ -159,5 +166,13 @@ export default function App() {
         <img src="/plus.svg" alt="" />
       </button>
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   )
 }
